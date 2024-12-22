@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Essay Scoring</title>
+    <style>
+        /* Reset styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Global styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f8f8;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        form {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        pre {
+            font-size: 15px; /* Adjust the font size here */
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            resize: vertical;
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            display: block;
+            width: 100%;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .results {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .score {
+            margin-bottom: 20px;
+        }
+
+        .score strong {
+            color: #4CAF50;
+        }
+
+        .evaluation {
+            font-style: italic;
+            color: #777;
+        }
+
+        /* Custom styles */
+        .predictions {
+            margin-bottom: 20px;
+        }
+
+        .predictions p {
+            margin-bottom: 10px;
+            color: #666;
+        }
+
+        .prediction-model {
+            margin-bottom: 15px;
+        }
+
+        .prediction-model h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .prediction-model ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .prediction-model li {
+            margin-bottom: 5px;
+            color: #666;
+        }
+
+        .prediction-model strong {
+            color: #4CAF50;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Automated Essay Grading System</h1>
+        <form id="essayForm" method="post">
+            <label for="essay"><pre>Should a government be allowed to limit the number of children a family can have?
+Enter your essay:</pre></label><br>
+            <textarea id="essay" name="essay" required>{{ essay }}</textarea><br>
+            <input type="submit" value="Submit">
+        </form>
+
+        <div id="results" class="results">
+            {% if essay %}
+            <div class="predictions">
+                <h2>Predictions</h2>
+                <div class="prediction-model">
+                    <h3>Model One Predictions</h3>
+                    <p><em>Predictions done using BERT and CELA Dataset</em></p>
+                    <ul>
+                        <li><strong>Grammar Score:</strong> {{ grammar_score }}/8 : Calculates the grammar quality of the essay.</li>
+                        <li><strong>Lexical Score:</strong> {{ lexical_score }}/8 : Evaluates the richness and appropriateness of vocabulary used.</li>
+                        <li><strong>Global Organization Score:</strong> {{ global_organization_score }}/8 : Assesses the overall structure and coherence of the essay.</li>
+                        <li><strong>Local Organization Score:</strong> {{ local_organization_score }}/8 : Analyzes the flow and cohesion within paragraphs and sentences.</li>
+                        <li><strong>Supporting Ideas Score:</strong> {{ supporting_ideas_score }}/8 : Rates the effectiveness of supporting arguments or evidence.</li>
+                        <li><strong>Holistic Score:</strong> {{ holistic_score }}/5 : Provides an overall assessment of the essay's quality considering various linguistic aspects.</li>
+                    </ul>
+                </div>
+                <div class="prediction-model">
+                    <h3>Model Two Predictions</h3>
+                    <p><em>Predictions done using BERT, self-made programmed functions, and Self-made Dataset using CELA</em></p>
+                    <ul>
+                        <li><strong>Grammar Score:</strong> {{ grammar_score2 }}/10 : Analyzes the grammatical correctness of the essay, using a self-programmed model.</li>
+                        <li><strong>Spelling Score:</strong> {{ spelling_score }}/10 : Rates the accuracy of spelling throughout the essay, using a self-programmed model.</li>
+                        <li><strong>Word Diversity Score:</strong> {{ word_diversity_score }}/10 : Evaluates the diversity and richness of vocabulary usage, using a self-programmed model.</li>
+                        <li><strong>Essay Quality Score:</strong> {{ essay_quality_score }}/10 : Provides an overall quality score based on various linguistic features and models, using the BERT model.</li>
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+	<!-- Feedback Section -->
+		<div class="feedback">
+    		<h2>Feedback</h2>
+    		<ul>
+       		 <!-- Grammar Score Feedback -->
+        		<li>
+            			{% if grammar_score >= 7 %}
+            			Grammar: Excellent use of grammar throughout the essay, demonstrating strong command of language.
+            			{% elif grammar_score >= 5 %}
+            			Grammar: Good grasp of grammar with minor errors, overall well-written.
+            			{% elif grammar_score >= 3 %}
+            			Grammar: Some grammatical errors detract from clarity, improvements needed.
+            			{% else %}
+            			Grammar: Numerous and significant grammatical errors impact comprehension, substantial revisions required.
+            			{% endif %}
+        		</li>
+        
+        		<!-- Lexical Score Feedback -->
+       		 <li>
+        		  	{% if lexical_score >= 7 %}
+            			Lexical: Impressive vocabulary usage, effectively enhances the essay's richness and depth.
+            			{% elif lexical_score >= 5 %}
+            			Lexical: Strong vocabulary employed, contributing to the essay's overall quality.
+            			{% elif lexical_score >= 3 %}
+            			Lexical: Adequate range of vocabulary, but could benefit from more varied expression.
+            			{% else %}
+            			Lexical: Limited vocabulary restricts expression and weakens the essay's impact.
+            			{% endif %}
+        		</li>
+        
+       
+        		 <!-- Global Organization Score Feedback -->
+       		 
+		<li>
+    			{% if global_organization_score >= 7 %}
+    			Global Organization: The essay exhibits a well-structured and coherent layout, effectively guiding the reader through clear transitions and logical progression of ideas.
+    			{% elif global_organization_score >= 5 %}
+    			Global Organization: Overall, the essay is mostly organized, with discernible structure and logical flow of ideas, though some areas could benefit from further coherence.
+    			{% elif global_organization_score >= 3 %}
+    			Global Organization: The essay demonstrates a need for better organization, with segments lacking clear transitions or coherence, leading to occasional confusion for the reader.
+    			{% else %}
+    			Global Organization: There is a noticeable lack of structure and coherence throughout the essay, resulting in difficulties in following the flow of ideas and understanding the overall argument.
+    			{% endif %}
+		</li>
+
+        
+        		<!-- Local Organization Score Feedback -->
+<li>
+    {% if local_organization_score >= 7 %}
+    Local Organization: The essay demonstrates a smooth flow between paragraphs and sentences, effectively guiding the reader through cohesive transitions and maintaining coherence.
+    {% elif local_organization_score >= 5 %}
+    Local Organization: Overall, the essay exhibits a reasonable flow between paragraphs and sentences, though improvements could enhance the coherence and fluidity of the argument.
+    {% elif local_organization_score >= 3 %}
+    Local Organization: The flow between paragraphs and sentences is somewhat choppy, making it challenging for the reader to follow the progression of ideas consistently.
+    {% else %}
+    Local Organization: There is a noticeable lack of coherence within paragraphs and sentences, resulting in disjointed ideas and difficulty in understanding the essay's argument.
+    {% endif %}
+</li>
+
+<!-- Supporting Ideas Score Feedback -->
+<li>
+    {% if supporting_ideas_score >= 7 %}
+    Supporting Ideas: The essay presents strong and convincing arguments, effectively supporting the main thesis with compelling evidence and logical reasoning.
+    {% elif supporting_ideas_score >= 5 %}
+    Supporting Ideas: The arguments are mostly clear and relevant, contributing to the overall coherence and persuasiveness of the essay's argument.
+    {% elif supporting_ideas_score >= 3 %}
+    Supporting Ideas: Some arguments lack clarity or relevance, detracting from the overall strength of the essay's argumentation.
+    {% else %}
+    Supporting Ideas: The essay's supporting arguments are weak or insufficient, failing to provide adequate evidence or reasoning to support the main thesis effectively.
+    {% endif %}
+</li>
+
+        
+        		<!-- Holistic Score Feedback -->
+        		<li>
+            			{% if holistic_score >= 4 %}
+            			Overall Essay Quality: Well-written and effectively addresses the topic.
+            			{% elif holistic_score >= 3 %}
+            			Overall Essay Quality: Adequate, but room for improvement.
+            			{% elif holistic_score >= 2 %}
+           			 Overall Essay Quality: Requires substantial improvement.
+            			{% else %}
+            			Overall Essay Quality: Significant revisions needed.
+            			{% endif %}
+        		</li>
+    
+    </ul>
+</div>
+
+    </div>
+    </div>
+
+    <script>
+        document.getElementById("essayForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            // Fetch data from the form
+            const formData = new FormData(event.target);
+
+            // Prepare data for submission (you can use FormData or serialize the form manually)
+            const essayData = {
+                essay: formData.get('essay')
+            };
+
+            // Perform asynchronous POST request to server
+            fetch("/submit-essay", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(essayData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle response data and update the results section
+                document.getElementById("results").innerHTML = data.html;
+            })
+            .catch(error => console.error("Error:", error));
+        });
+    </script>
+
+</body>
+
+</html>
